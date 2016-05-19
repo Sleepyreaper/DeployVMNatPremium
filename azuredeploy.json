@@ -119,6 +119,7 @@
       "properties": {
         "accountType": "[variables('storageAccountType')]"
       }
+    },
       {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageAccountName')]",
