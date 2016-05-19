@@ -79,12 +79,12 @@
     },
     "vmSize": {
       "type": "string",
-      "defaultValue": "Standard_A1",
+      "defaultValue": "Standard_DS2_v2",
       "allowedValues": [
-        "Standard_A0",
-        "Standard_A1",
-        "Standard_A2",
-        "Standard_A3",
+        "Standard_DS1_v2",
+        "Standard_DS2_v2",
+        "Standard_DS3_v2",
+        "Standard_DS4_v2",
         "Standard_A4"
       ],
       "metadata": {
@@ -93,7 +93,8 @@
     }
   },
   "variables": {
-    "storageAccountType": "Standard_LRS",
+    "storageAccountType": "Premium_LRS",
+    "diagstoraccounttype": "Standard_LRS"
     "vmStorageAccountContainerName": "vhds",
     "availabilitySetName": "myAvSet",
     "addressPrefix": "10.0.0.0/16",
@@ -107,6 +108,7 @@
     "numberOfInstances": 2,
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
     "storageAccountName": "[uniqueString(resourceGroup().id)]"
+    "diagstorageAccountName": "[uniqueString(resourceGroup().id)]"
   },
   "resources": [
     {
@@ -116,6 +118,14 @@
       "location": "[resourceGroup().location]",
       "properties": {
         "accountType": "[variables('storageAccountType')]"
+      }
+      {
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[variables('diagstorageAccountName')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "accountType": "[variables('diagstoraccounttype')]"
       }
     },
     {
@@ -296,7 +306,7 @@
         "diagnosticsProfile": {
           "bootDiagnostics": {
              "enabled": "true",
-             "storageUri": "[concat('http://',variables('storageAccountName'),'.blob.core.windows.net')]"
+             "storageUri": "[concat('http://',variables('diagstorageAccountName'),'.blob.core.windows.net')]"
           }
         }
       }
