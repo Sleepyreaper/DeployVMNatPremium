@@ -94,7 +94,7 @@
   },
   "variables": {
     "storageAccountType": "Premium_LRS",
-    "diagstoraccounttype": "Standard_LRS"
+    "diagstoraccounttype": "Standard_LRS",
     "vmStorageAccountContainerName": "vhds",
     "availabilitySetName": "myAvSet",
     "addressPrefix": "10.0.0.0/16",
@@ -107,7 +107,7 @@
     "lbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('lbName'))]",
     "numberOfInstances": 2,
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
-    "storageAccountName": "[uniqueString(resourceGroup().id)]"
+    "storageAccountName": "[uniqueString(resourceGroup().id)]",
     "diagstorageAccountName": "[uniqueString(resourceGroup().id)]"
   },
   "resources": [
