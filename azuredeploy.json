@@ -14,6 +14,22 @@
         "description": "Admin password"
       }
     },
+    "avsetname":{
+       "type": "string",
+       "metadata":{
+        "description": "Availability Set Name"
+      }
+    },
+    "region": {
+      "type": "string",
+      "defaultValue": "East US",
+      "allowedValues": [
+        "East US",
+     ],
+     "metadata":{
+         "description": "Region with Premium storage and v2 instances"
+     }
+    },
     "dnsNameforLBIP": {
       "type": "string",
       "defaultValue": "uniqueDnsNameforLBIP",
@@ -96,7 +112,7 @@
     "storageAccountType": "Premium_LRS",
     "diagstoraccounttype": "Standard_LRS",
     "vmStorageAccountContainerName": "vhds",
-    "availabilitySetName": "myAvSet",
+    "availabilitySetName": "[resourceId('Microsoft.Compute/availabilitySets',parameters('avsetname"))],
     "addressPrefix": "10.0.0.0/16",
     "subnetName": "Subnet-1",
     "subnetPrefix": "10.0.0.0/24",
