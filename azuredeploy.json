@@ -110,7 +110,6 @@
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables ('subnetName'))]",
     "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIPAddressName'))]",
     "lbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('lbName'))]",
-    "location": "East US",
     "numberOfInstances": 2,
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
     "storageAccountName": "[uniqueString(resourceGroup().id)]",
@@ -121,7 +120,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('storageAccountName')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       
       "properties": {
         "accountType": "[variables('storageAccountType')]"
@@ -131,7 +130,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageAccountName')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "properties": {
         "accountType": "[variables('diagstoraccounttype')]"
       }
@@ -140,14 +139,14 @@
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('availabilitySetName')]",
       "apiVersion": "2015-06-15",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "properties": {}
     },
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[parameters('publicIPAddressName')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
         "dnsSettings": {
@@ -159,7 +158,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('vnetName')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -180,7 +179,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(parameters('nicNamePrefix'), copyindex())]",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "copy": {
         "name": "nicLoop",
         "count": "[variables('numberOfInstances')]"
@@ -218,7 +217,7 @@
       "apiVersion": "2015-06-15",
       "name": "[parameters('lbName')]",
       "type": "Microsoft.Network/loadBalancers",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]"
       ],
@@ -244,7 +243,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/loadBalancers/inboundNatRules",
       "name": "[concat(parameters('lbName'), '/', 'RDP-VM', copyIndex())]",
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "copy": {
         "name": "lbNatLoop",
         "count": "[variables('numberOfInstances')]"
@@ -270,7 +269,7 @@
         "name": "virtualMachineLoop",
         "count": "[variables('numberOfInstances')]"
       },
-      "location": "[variables('location')]",
+      "location": "[parameters('locationwithpremium')]",
       "dependsOn": [
         "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', parameters('nicNamePrefix'), copyindex())]",
