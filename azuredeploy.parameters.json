@@ -10,6 +10,10 @@
     },
     "dnsNameforLBIP": {
       "value": "GEN-UNIQUE"
+    },
+    "locationwithpremium":{
+        "value": "East US"
+    },
     }
   }
 }
