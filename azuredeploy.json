@@ -20,16 +20,6 @@
         "description": "Availability Set Name"
       }
     },
-    "region": {
-      "type": "string",
-      "defaultValue": "East US",
-      "allowedValues": [
-        "East US",
-     ],
-     "metadata":{
-         "description": "Region with Premium storage and v2 instances"
-     }
-    },
     "dnsNameforLBIP": {
       "type": "string",
       "defaultValue": "uniqueDnsNameforLBIP",
@@ -120,6 +110,7 @@
     "subnetRef": "[concat(variables('vnetID'),'/subnets/',variables ('subnetName'))]",
     "publicIPAddressID": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('publicIPAddressName'))]",
     "lbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('lbName'))]",
+    "location": "East US",
     "numberOfInstances": 2,
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
     "storageAccountName": "[uniqueString(resourceGroup().id)]",
@@ -130,7 +121,8 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('storageAccountName')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
+      
       "properties": {
         "accountType": "[variables('storageAccountType')]"
       }
@@ -139,7 +131,7 @@
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('diagstorageAccountName')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "properties": {
         "accountType": "[variables('diagstoraccounttype')]"
       }
@@ -148,14 +140,14 @@
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('availabilitySetName')]",
       "apiVersion": "2015-06-15",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "properties": {}
     },
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[parameters('publicIPAddressName')]",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "properties": {
         "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
         "dnsSettings": {
@@ -167,7 +159,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[parameters('vnetName')]",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -188,7 +180,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
       "name": "[concat(parameters('nicNamePrefix'), copyindex())]",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "copy": {
         "name": "nicLoop",
         "count": "[variables('numberOfInstances')]"
@@ -226,7 +218,7 @@
       "apiVersion": "2015-06-15",
       "name": "[parameters('lbName')]",
       "type": "Microsoft.Network/loadBalancers",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/', parameters('publicIPAddressName'))]"
       ],
@@ -252,7 +244,7 @@
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/loadBalancers/inboundNatRules",
       "name": "[concat(parameters('lbName'), '/', 'RDP-VM', copyIndex())]",
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "copy": {
         "name": "lbNatLoop",
         "count": "[variables('numberOfInstances')]"
@@ -278,7 +270,7 @@
         "name": "virtualMachineLoop",
         "count": "[variables('numberOfInstances')]"
       },
-      "location": "[resourceGroup().location]",
+      "location": "[variables('location')]",
       "dependsOn": [
         "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
         "[concat('Microsoft.Network/networkInterfaces/', parameters('nicNamePrefix'), copyindex())]",
